@@ -55,15 +55,62 @@ body {
 
 #createButton{
   margin-right: 10px;
+  width: 100px;
+}
+
+#joinButton{
+  width: 100px;
+}
+
+#title{
+  line-height: 15px;
 }
 
 .room__create, .room__join{
+  padding-top: 10px;
+  padding-bottom: 10px;
   max-width: 400px;
   margin: 0 auto;
   text-align: center;
   margin-bottom: 20px;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 #id, #createId, #joinId, #joinRoomForm, #createRoomForm{
   margin-bottom: 20px;
+}
+
+#joinRoomForm, #createRoomForm{
+  margin: 0 auto;
+  max-width: 150px;
+}
+
+#joinId, #createId{
+  text-align: center;
+}
+#joinRoomForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#joinRoomForm input:first-child {
+  width: 150px;
+}
+#joinRoomForm input:last-child {
+  width: 100px;
+}
+
+.create__options input {
+  width: 100px;
+}
+
+.create__options{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }

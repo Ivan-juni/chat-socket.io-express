@@ -36,14 +36,17 @@
                 </div>
             </div>
             <div class="room__create hide">
-                <p class="lead">Create new room</p>
+                <p class="lead" id="title">Create new room</p>
                 <form id="createRoomForm">
                     <input name="id" id="createId" class="form-control" placeholder="Enter the id">
-                    <input type="submit" value="Create" class="btn btn-primary">
+                    <div class="create__options">
+                        <input value="Random" class="btn btn-danger" id="random">
+                        <input type="submit" value="Create" class="btn btn-primary">
+                    </div>
                 </form>
             </div>
             <div class="room__join hide">
-                <p class="lead">Join to available room</p>
+                <p class="lead" id="title">Join to available room</p>
                 <form id="joinRoomForm">
                     <input name="id" id="joinId" class="form-control" placeholder="Enter the id">
                     <input type="submit" value="Join" class="btn btn-warning">

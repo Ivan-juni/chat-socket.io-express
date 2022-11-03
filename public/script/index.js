@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const createIdInput = document.querySelector('#createId')
   const joinIdInput = document.querySelector('#joinId')
 
+  const randomIdButton = document.querySelector('#random')
+
   const sendMessage = (event) => {
     event.preventDefault()
     if (textarea.value !== '' && nameInput.value !== '') {
@@ -36,8 +38,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
   }
 
-  const room = (e, element, message) => {
-    e.preventDefault()
+  const room = (event, element, message) => {
+    event.preventDefault()
 
     socket.on('joined', (data) => {
       if (data.joined === true) {
@@ -70,9 +72,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
     case 3:
       alertColor = 'success'
       break
-    // case 4:
-    //   alertColor = 'light'
-    //   break
     case 4:
       alertColor = 'warning'
       break
@@ -96,11 +95,11 @@ document.addEventListener('DOMContentLoaded', function (event) {
   })
 
   joinButton.addEventListener('click', (e) => {
-    roomJoinDiv.classList.remove('hide')
+    roomJoinDiv.classList.toggle('hide')
   })
 
   createButton.addEventListener('click', (e) => {
-    roomCreateDiv.classList.remove('hide')
+    roomCreateDiv.classList.toggle('hide')
   })
 
   createRoomForm.addEventListener('submit', (event) => {
@@ -111,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     })
     room(event, roomCreateDiv, 'Room already exists')
   })
+
   joinRoomForm.addEventListener('submit', (event) => {
     ID = joinIdInput.value
     socket.emit('join-to-room', {
@@ -120,6 +120,11 @@ document.addEventListener('DOMContentLoaded', function (event) {
     room(event, roomJoinDiv, 'Room does not exist')
   })
 
+  randomIdButton.addEventListener('click', (event) => {
+    createIdInput.value = `${Math.trunc(Math.random() * 999)}-${Math.trunc(
+      Math.random() * 999
+    )}-${Math.trunc(Math.random() * 999)}`
+  })
   // * Event listeners *
 
   socket.on('add-message-to-div', (data) => {
