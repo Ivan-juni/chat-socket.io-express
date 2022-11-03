@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+
+    <title>Soket.io Chat</title>
+</head>
+<body>
+    <header>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center  px-md-4 mb-3 bg-white border-bottom box-shadow">
+            <h5 class="my-0 mr-md-auto font-weight-normal">Socket.io Chat</h5>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center p-3">
+                <nav class="my-2 my-md-0 mr-md-3" id="navbar">
+                    <a class="p-2 text-dark" href="#">Features</a>
+                    <a class="p-2 text-dark" href="#">Enterprise</a>
+                    <a class="p-2 text-dark" href="#">Support</a>
+                    <a class="p-2 text-dark" href="#">Pricing</a>
+                </nav>
+                <a class="btn btn-outline-primary" href="#">Sign up</a>
+            </div>
+        </div>
+    </header>
+    <main role="main" class="container">
+        <div class="container room-out">
+            <div class="py-5 text-center">
+                <h1>Socket.io chat</h1>
+                <p class="lead">Create room or join to available</p>
+                <div class="">
+                    <button class="btn btn-primary" id="createButton">Create</button>
+                    <button class="btn btn-warning" id="joinButton">Join</button>
+                </div>
+            </div>
+            <div class="room__create hide">
+                <p class="lead">Create new room</p>
+                <form id="createRoomForm">
+                    <input name="id" id="createId" class="form-control" placeholder="Enter the id">
+                    <input type="submit" value="Create" class="btn btn-primary">
+                </form>
+            </div>
+            <div class="room__join hide">
+                <p class="lead">Join to available room</p>
+                <form id="joinRoomForm">
+                    <input name="id" id="joinId" class="form-control" placeholder="Enter the id">
+                    <input type="submit" value="Join" class="btn btn-warning">
+                </form>
+            </div>
+        </div>
+        <div class="container room-in hide">
+            <div class="py-5 text-center">
+                <h1>Socket.io chat</h1>
+                <p class="lead">Type your name and start messaging</p>
+            </div>
+            <div class="row" id="row">
+                <div class="col-6">
+                    <h3>Message form</h3>
+                    <form id="messageForm">
+                        <label for="name">Name</label>
+                        <input name="name" id="name" class="form-control" placeholder="Enter the name">
+                        <label for="message">Message</label>
+                        <textarea name="message" id="message" class="form-control" placeholder="Enter the message"></textarea>
+                        <input type="submit" value="Send" class="btn btn-danger">
+                    </form>
+                </div>
+                <div class="col-6">
+                    <h3>Messages</h3>
+                    <div class="messages" id="messages"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container text-center">
+            <span class="text-muted">Socket.io chat</span>
+        </div>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="./script/index.js"></script>
+</body>
+</html>
