@@ -1,6 +1,12 @@
 document.addEventListener('DOMContentLoaded', function (event) {
   const socket = io.connect()
 
+  var createdRooms = []
+
+  socket.on('init', (data) => {
+    createdRooms = data
+  })
+
   var ID
 
   const form = document.querySelector('#messageForm')
@@ -12,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const roomInDiv = document.querySelector('.room-in')
   const roomCreateDiv = document.querySelector('.room__create')
   const roomJoinDiv = document.querySelector('.room__join')
+  const roomIdTitle = document.querySelector('#roomId')
 
   const createButton = document.querySelector('#createButton')
   const joinButton = document.querySelector('#joinButton')
@@ -21,8 +28,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
   const createIdInput = document.querySelector('#createId')
   const joinIdInput = document.querySelector('#joinId')
+  const joinIdSelect = document.querySelector('#selectRoom')
 
   const randomIdButton = document.querySelector('#random')
+  const leaveButton = document.querySelector('#leave__button')
 
   const sendMessage = (event) => {
     event.preventDefault()
@@ -41,7 +50,10 @@ document.addEventListener('DOMContentLoaded', function (event) {
   const room = (event, element, message) => {
     event.preventDefault()
 
+    roomIdTitle.innerText = `Message form (${ID})`
+
     socket.on('joined', (data) => {
+      createdRooms = data.createdRooms
       if (data.joined === true) {
         roomOutDiv.classList.add('hide')
         roomInDiv.classList.remove('hide')
@@ -49,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
         element.insertAdjacentHTML(
           'beforeend',
           `
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" id="exist">
                 <span>${message}</span>
             </div>
         `
@@ -94,7 +106,24 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
   })
 
+  joinIdSelect.addEventListener('change', (event) => {
+    if (joinIdSelect.options[joinIdSelect.selectedIndex].text == 'Enter id') {
+      document.querySelector('#joinIdInputDiv').classList.remove('hide')
+      ID = joinIdInput.value
+    } else {
+      ID = joinIdSelect.value
+    }
+  })
+
   joinButton.addEventListener('click', (e) => {
+    for (let index = 0; index < createdRooms.length; index++) {
+      const room = createdRooms[index]
+      const option = document.createElement('option')
+      option.value = index + 2
+      option.innerHTML = room
+      joinIdSelect.appendChild(option)
+    }
+
     roomJoinDiv.classList.toggle('hide')
   })
 
@@ -112,7 +141,11 @@ document.addEventListener('DOMContentLoaded', function (event) {
   })
 
   joinRoomForm.addEventListener('submit', (event) => {
-    ID = joinIdInput.value
+    if (joinIdInput && joinIdInput.value !== '') {
+      ID = joinIdInput.value
+    } else {
+      ID = selectRoom.options[selectRoom.selectedIndex].text
+    }
     socket.emit('join-to-room', {
       message: 'Client attempt to join',
       roomId: ID,
@@ -125,6 +158,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
       Math.random() * 999
     )}-${Math.trunc(Math.random() * 999)}`
   })
+
+  leaveButton.addEventListener('click', (event) => {
+    socket.emit('leave-the-room', {
+      message: 'Client left the room',
+      name: nameInput.value,
+      roomId: ID,
+    })
+    window.location.reload()
+  })
   // * Event listeners *
 
   socket.on('add-message-to-div', (data) => {
@@ -134,6 +176,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
         <div class="alert alert-${data.messageColor}" id="message__alert" role="alert">
             <span>${data.name}:</span>
             <span>${data.message}</span>
+        </div>
+      `
+    )
+  })
+
+  socket.on('user-left', (data) => {
+    messages.insertAdjacentHTML(
+      'beforeend',
+      `
+        <div class="alert alert-danger" id="message__alert" role="alert">
+            <span>User ${data} left the room</span>
         </div>
       `
     )

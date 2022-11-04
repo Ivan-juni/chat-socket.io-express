@@ -1,5 +1,6 @@
 users = []
 connections = []
+createdRooms = []
 
 module.exports = (io) =>
   function (socket) {
@@ -7,15 +8,27 @@ module.exports = (io) =>
       connections.push(socket)
       console.log(`Socket № ${connections.indexOf(socket) + 1} connected`)
     }
+    for (const key in io.sockets.adapter.rooms.keys()) {
+      if (Object.hasOwnProperty.call(object, key)) {
+        const room = io.sockets.adapter.rooms.keys()[key]
+        createdRooms.push(room)
+      }
+    }
+    io.sockets.emit('init', createdRooms)
 
     socket.on('create-the-room', (data) => {
-      if (!io.sockets.adapter.rooms.get(data.roomId)) {
+      if (
+        !io.sockets.adapter.rooms.get(data.roomId) &&
+        !createdRooms[data.roomId]
+      ) {
         // if room does not exist
         console.log(data.message)
         socket.join(data.roomId)
         io.to(data.roomId).emit('joined', {
           joined: true,
+          createdRooms: createdRooms,
         })
+        createdRooms.push(data.roomId)
       } else {
         socket.emit('joined', {
           joined: false,
@@ -46,6 +59,12 @@ module.exports = (io) =>
         message: data.message,
         messageColor: data.messageColor,
       })
+    })
+
+    socket.on('leave-the-room', (data) => {
+      console.log('Client left the room')
+      socket.leave(data.roomId)
+      socket.to(data.roomId).emit('user-left', data.name)
     })
 
     socket.on('disconnect', () => {

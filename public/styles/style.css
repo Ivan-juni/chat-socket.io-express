@@ -99,8 +99,23 @@ body {
 #joinRoomForm input:first-child {
   width: 150px;
 }
-#joinRoomForm input:last-child {
+#joinRoomForm input{
   width: 100px;
+}
+
+#joinIdInputDiv {
+  min-width: 150px;
+}
+
+#joinIdInputDiv input {
+  width: 100%;
+}
+
+#selectRoom{
+  margin-bottom: 20px;
+}
+#exist {
+  margin-top: 20px;
 }
 
 .create__options input {
